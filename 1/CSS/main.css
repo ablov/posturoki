@@ -1,0 +1,53 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.wrap {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+}
+button {
+    font-size: 2em;
+    margin-bottom: 1em;
+}
+#myText {
+    display: block;
+    width: 100%;
+    height: 60vh;
+    margin: 5px auto;
+    font-family: monospace;
+    font-size: 2rem;
+}
+#myText input[type=text] {
+    font-size: 1em;
+    font-family: monospace;
+    width: 0.6em;
+    border: none;
+}
+.place {
+    display: inline;
+    height: 0.5em;
+}
+.place.cursor {
+    border: green 1px solid;
+}
+#buttons {
+    display: flex;
+}
+#buttons button {
+    height: 1.5em;
+    width: 1.5em
+}
+#result {
+    display: block;
+    border: aqua 1px solid;
+    width: 100%;
+    margin: 0 auto;
+    font-size: 2rem;
+}
+.mistake {
+    color: red;
+    font-weight: bold;
+}
