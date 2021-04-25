@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="d427f548-6544-42d4-97e0-3172813df8d5" name="test.ablov.ru" url="http://test.ablov.ru/posturoki">
+        <fileTransfer rootFolder="/home/ablov/www/ablov/test.ablov.ru/posturoki" accessType="SFTP" host="rebus.ablov.ru" port="22" sshConfigId="4d797e22-6f4f-4d9f-bc9a-1c0fb6b15d8f" sshConfig="ablov@rebus.ablov.ru:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

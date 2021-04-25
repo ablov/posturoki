@@ -9,13 +9,12 @@
     <script src="https://code.jquery.com/jquery-3.3.0.min.js"
             integrity="sha256-RTQy8VOmNlT6b2PIRur37p6JEBZUE7o8wPgMvu18MC4="
             crossorigin="anonymous"></script>
-    <script src="JS/main.js"></script>
+    <script src="JS/test.js"></script>
 </head>
 <body>
-<!--<p>Cursor position: <span id="indicator"></span></p>-->
 <div class="wrap">
-    <textarea id="myText"></textarea>
-    <button id="check">Проверить</button>
-    <div id="result"></div>
+    <div id="myText">
+        <p><span class="place" id="0"></span><span class="place" id="1">_</span>
+    </div>
 </div>
 </body>
