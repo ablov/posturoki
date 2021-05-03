@@ -12,10 +12,19 @@
     <script src="JS/main.js"></script>
 </head>
 <body>
-<!--<p>Cursor position: <span id="indicator"></span></p>-->
+<h1>Выберите упражнение</h1>
 <div class="wrap">
-    <textarea id="myText" spellcheck="false"></textarea>
-    <button id="check">Проверить</button>
-    <div id="result"></div>
+<?php
+    require_once "PHPLib/db_engine.inc";
+
+    $db = new db_engine();
+    $output = "";
+    $tests = $db->getListOfTests();
+    foreach ($tests as $test) {
+        $output .= '<button class="title_button" onclick="openTest(' . $test['ID'] . ')">' . $test['Title'] . '</button>';
+    }
+
+print $output;
+?>
 </div>
 </body>

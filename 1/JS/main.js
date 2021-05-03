@@ -113,16 +113,22 @@ String.prototype.replaceAt = function (index, replacement) {
     return this.substring(0, index) + replacement + this.substring(index + 1);
 }
 
-$(document).ready(()=>{
-    let textArea = $("#myText");
+$(()=>{
+    const textArea = $("#myText");
+    const resultNode = $("#result");
+    const keyText = resultNode.text();
     let cursorPosition = 0;
     textArea.focus();
-    textArea.val(test[variant]);
     textArea.setCursorPosition(0);
     $("#check").on("click",() => {
-        $("#result").html(check(textArea.val(), key[variant]));
+        resultNode.html(check(textArea.val(), keyText)).show();
     })
 })
+
+function openTest(testID) {
+    window.location.href = "test.php?TestID=" + testID;
+    return false;
+}
 
 // Compare textArea with key and make html output with marked mistakes as <span class='mistake'>
 function check(textArea, key) {
@@ -132,7 +138,8 @@ function check(textArea, key) {
     for (let i = 0; i < length; i++) {
         let char = textArea.charAt(j);
         const keyChar = key.charAt(i);
-        if (char === keyChar) result += char;
+        if (char === '\n') result += "<br>";
+        else if (char === keyChar) result += char;
         else { // check for mistakes
             // check '', '-', ' '
             switch (char) {

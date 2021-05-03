@@ -1,0 +1,140 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#getPassword {
+    width: 450px;
+    height: 150px;
+    margin: 50px auto;
+    background-color: #00ffff87;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 20px;
+    font-family: Calibry, Arial, sans-serif;
+    border: blue 1px solid;
+}
+
+input[type="password"],
+input[type="text"] {
+    padding: 2px;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+    font-family: Calibri, Arial, sans-serif;
+    margin: 1.5em;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    margin: 10px auto;
+    width: 90%;
+    font-size: 2em;
+    font-family: Calibri, Arial, sans-serif;
+}
+
+.list .list_line {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.list_line .test_buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.add_button {
+    margin: 25px 0;
+    padding: 15px 20px;
+    border: gray 1px solid;
+    border-radius: 4px;
+    width: max-content;
+}
+
+.add_button:hover {
+    cursor: pointer;
+    background-color: lightgreen;
+}
+
+.list_line .test_edit,
+.list_line .test_remove {
+    border: gray 1px solid;
+    border-radius: 4px;
+    padding: 0 20px;
+    margin: 0 5px;
+}
+
+.list_line .test_edit:hover {
+    cursor: pointer;
+    background-color: lightyellow;
+}
+
+.list_line .test_remove:hover {
+    cursor: pointer;
+    background-color: darkred;
+    color: lightyellow;
+}
+
+.input_form {
+    width: 80%;
+    min-width: 600px;
+    margin: 0 auto;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 1.5em;
+}
+
+.input_form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input_form label {
+    margin: 0 auto;
+}
+
+.input_form input[type="text"] {
+    padding: 5px;
+    width: 600px;
+    font-size: 1em;
+}
+
+.input_form textarea {
+    font-size: inherit;
+    height: 10em;
+}
+
+.input_form button {
+    margin-top: 30px;
+    width: 300px;
+    height: 70px;
+    font-size: 1.5em;
+}
+
+.message_box {
+    display: block;
+    width: fit-content;
+    border: darkblue 1px solid;
+    margin: 100px auto;
+    padding: 0 40px 20px;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 1.5em;
+    background: aliceblue;
+    box-shadow: 3px 3px grey;
+}
+
+.message_box button {
+    font-size: 1em;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+}
