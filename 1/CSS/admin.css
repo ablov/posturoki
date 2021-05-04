@@ -120,6 +120,7 @@ h1 {
 .message_box {
     display: block;
     width: fit-content;
+    max-width: 600px;
     border: darkblue 1px solid;
     margin: 100px auto;
     padding: 0 40px 20px;
