@@ -1,25 +1,46 @@
 body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+}
+
+.message_box {
+    display: block;
+    width: fit-content;
+    max-width: 600px;
+    border: darkblue 1px solid;
+    margin: 100px auto;
+    padding: 0 40px 20px;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 1.5em;
+    background: aliceblue;
+    box-shadow: 3px 3px grey;
+}
+
+.message_box button,
+.message_box input[type="submit"] {
+    font-size: 1em;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
 }
 
 #getPassword {
-    width: 450px;
-    height: 150px;
-    margin: 50px auto;
-    background-color: #00ffff87;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    padding: 20px;
-    font-family: Calibry, Arial, sans-serif;
-    border: blue 1px solid;
+    box-sizing: border-box;
+    height: 4em;
+    width: 600px;
+    padding-top: 20px;
 }
 
 input[type="password"],
 input[type="text"] {
     padding: 2px;
+    font-size: 1em;
 }
 
 h1 {
@@ -115,27 +136,4 @@ h1 {
     width: 300px;
     height: 70px;
     font-size: 1.5em;
-}
-
-.message_box {
-    display: block;
-    width: fit-content;
-    max-width: 600px;
-    border: darkblue 1px solid;
-    margin: 100px auto;
-    padding: 0 40px 20px;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: 1.5em;
-    background: aliceblue;
-    box-shadow: 3px 3px grey;
-}
-
-.message_box button {
-    font-size: 1em;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.error {
-    color: red;
 }
