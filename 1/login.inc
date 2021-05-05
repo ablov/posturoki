@@ -12,7 +12,7 @@
   <script src="JS/MD5.js"></script>
 </head>
 <body>
-<form id="getPassword" action="admin.php" method="post" onsubmit="let pass = $('#password'); pass.val($.MD5(pass.val()))">
+<form id="getPassword" class="message_box" action="admin.php" method="post" onsubmit="let pass = $('#password'); pass.val($.MD5(pass.val()))">
   <label>Введите пароль:
     <input type="password" name="password" id="password" required autofocus>
   </label>

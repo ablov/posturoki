@@ -1,6 +1,5 @@
 <?php
 
-include "PHPLib/validate.inc";
 require_once "PHPLib/db_engine.inc";
 
 const PASSWORD_MD5="9cce20fbc734a63ea2eecde6d30fb0ba";
@@ -12,6 +11,8 @@ if(isset($_POST['password'])) {
     session_start();
     $_SESSION['signed_in'] = true;
   }
+} else {
+    session_start();
 }
 if (isset($_POST['Action']) && !strcmp($_POST['Action'], "DELETE") && isset($_POST['TestID'])) {
     $db = new db_engine();
