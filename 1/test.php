@@ -12,7 +12,7 @@
   <script src="JS/main.js"></script>
 </head>
 <body>
-<div class='wrap'>
+<div class='wrap_test'>
   <?php
   require_once "PHPLib/db_engine.inc";
 
