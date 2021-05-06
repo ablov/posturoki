@@ -12,6 +12,7 @@ h1 {
 .wrap {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-evenly;
     width: 90%;
     margin: 0 auto;
 }
@@ -19,20 +20,34 @@ h1 {
     font-family: Arial, sans-serif;
     font-size: large;
 }
-button {
+.wrap button {
     font-size: 2em;
     margin-bottom: 1em;
 }
 .title_button {
     margin: 1em;
     width: 25%;
+    min-width: 300px;
     min-height: 6em;
+}
+.wrap_test {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 90%;
+    margin: 0 auto;
+}
+.wrap_test button {
+    margin: 10px 0;
+    width: 250px;
+    height: 70px;
+    font-size: 2em;
 }
 #myText {
     display: block;
     width: 100%;
     height: 40vh;
-    margin: 5px auto;
+    padding: 5px;
     font-size: 2rem;
 }
 #result {
@@ -49,10 +64,40 @@ button {
     font-weight: bold;
 }
 
-@media only screen and (max-height: 1050px) {
-    .wrap {
-        display: block;
+@media only screen and (max-width: 720px) {
+    .wrap,
+    .wrap_test {
+        width: 100%;
     }
+    .wrap button {
+        font-size: 1em;
+    }
+    .title_button {
+        margin: 0.5em;
+    }
+}
+
+@media only screen and (max-width: 650px) {
+    h1 {
+        font-size: 1rem;
+        margin: 0.5em 0;
+    }
+    .wrap_test button {
+        width: 180px;
+        height: 45px;
+        font-size: 1.5em;
+    }
+    #myText {
+        height: 5em;
+        font-size: 1.5rem;
+    }
+    #result {
+        font-size: 1.5em;
+    }
+}
+
+/* ToDo: For mobile landscape orientation
+@media only screen and (max-height: 1050px) {
     #myText {
         width: 45%;
     }
@@ -60,3 +105,4 @@ button {
         width: 45%;
     }
 }
+*/
