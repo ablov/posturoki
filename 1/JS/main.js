@@ -57,10 +57,11 @@ function openTest(testID) {
 function check(textArea, key) {
     const length = Math.min(textArea.length, key.length);
     let result = '';
-    let j = 0;
-    for (let i = 0; i < length; i++) {
-        let char = textArea.charAt(j);
-        const keyChar = key.charAt(i);
+    let i; // key index
+    let j; // test index
+    let char = ''; // symbol from test
+    let keyChar = ''; // symbol from key
+    for (i = 0, j = 0; (typeof (char = textArea[j]) !== 'undefined') && (typeof (keyChar = key[i]) !== 'undefined'); i++, j++) {
         if (char === '\n') result += "<br>";
         else if (char === keyChar) result += char;
         else { // check for mistakes
@@ -105,7 +106,6 @@ function check(textArea, key) {
                     }
             }
         }
-        ++j;
     }
     return result;
 }
