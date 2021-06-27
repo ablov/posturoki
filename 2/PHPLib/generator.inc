@@ -1,12 +1,7 @@
 <?php
-const FIELD_START = array("type" => 'none', "key" => null, "state" => null);
-const FIELD_COMMA_0 = array("type" => 'comma', "key" => 0, "state" => 0);
-const FIELD_COMMA_1 = array("type" => 'comma', "key" => 1, "state" => 0);
-const FIELD_COMMA_2 = array("type" => 'comma', "key" => 2, "state" => 0);
-const FIELD_COLON = array("type" => 'comma', "key" => 3, "state" => 0);
-const FIELD_LETTER = array("type" => 'letter', "key" => '', "state" => null);
-const FIELD_SPACE =  array("type" => 'space', "key" => '', "state" => null);
-
+/*
+ * Генератор HTML-кода и json-списка ключей
+ *
 $test = "Чаща была большая чёрная лохматая. Долго об_жат_ся она (н_)умела (по)этому пр_легла у ног Черничкиной пол_жила гр_мадную голову на вытянутые лапы а серые глаза пр_крыла так что они пр_вр_тились в узенькие щ_лочки. Чаща рас_читывала что так она произведёт хорошее впеч_тление и будет казат_ся самой добродушной собакой на свете. Её рас_чёты оправдались полностью: Черничкина накл_нилась и погладила её по голове. Вот только книжка выск_льзнула из набитого рю_зачка и упала раскрывш_сь на шес_надцатой странице. Чаща тут(же) уселась и с увлечением стала читать прямо с того места где пр_старелая Акка предводительница гусей думает брать ли ей Нильса в птич_ю стаю. Она гл_тала страницу за страниц_й и (н_)успокоилась до тех пор пока (н_)проч_тала как Акка прим_рила гусей и дала Нильсу пр_станище. Что было делать Черничкиной-младшей? (Н_)отрывать же собаку от чтения! Черничкина была хорошо воспита_а и привыкла сочу_ствен_о относит_ся к чужим увл_чениям.\n
 — Давай снов_ увидимся! — обн_мая на прощанье Чащу, говорила Черничкина.\n
 — Ты свис_ни, тебя (н_)заставлю я ждать, — отвечала рас_трога_н_ая Чаща мощ_ной лапой помогая запихнуть книгу в рюкзач_к.\n
@@ -19,7 +14,22 @@ $keyText = "Чаща была большая, чёрная, лохматая. Д
 
 $result = prepareTest($test, $keyText);
 print $result["resultHTML"];
+*/
 
+const FIELD_START = array("type" => 'none', "key" => null, "state" => null);
+const FIELD_COMMA_0 = array("type" => 'comma', "key" => 0, "state" => 0); // нет знака препинания
+const FIELD_COMMA_1 = array("type" => 'comma', "key" => 1, "state" => 0); // запятая
+const FIELD_COMMA_2 = array("type" => 'comma', "key" => 2, "state" => 0); // опциональная запятая
+const FIELD_COLON = array("type" => 'comma', "key" => 3, "state" => 0); // двоеточие
+const FIELD_DASH = array("type" => 'comma', "key" => 4, "state" => 0); // тире
+const FIELD_LETTER = array("type" => 'letter', "key" => '', "state" => null);
+const FIELD_SPACE =  array("type" => 'space', "key" => '', "state" => null);
+
+/**
+ * @param string $test Тестовый текст
+ * @param string $keyText Проверочный текст (ключ)
+ * @return array ["resultHTML", "keys"] HTML-код с полями и json-список ключей
+ */
 function prepareTest(string $test, string $keyText) : array
 {
   $testIndex = 0;
@@ -61,7 +71,7 @@ function prepareTest(string $test, string $keyText) : array
               $resultHTML .= "<span class=\"place\" id=\"$fieldIndex\"></span> ";
               $fieldIndex++;
             }
-            // Если была - просто ставим пробел и сбрасываем флаг
+            // если был - просто ставим пробел и сбрасываем флаг
             else {
               $resultHTML .= $testChar;
               $preChar = '';
@@ -91,16 +101,29 @@ function prepareTest(string $test, string $keyText) : array
                 $keyTextIndex += 3;
               }
               else { // что-то непонятное в скобках?
-                die("Unknown case near key: '" . mb_substr($keyText, $keyTextIndex, 10) . "'");
+                return array(
+                  "status" => "Не удалось распознать значение в ключе",
+                  "testIndex" => $testIndex,
+                  "keyIndex" => $keyTextIndex,
+                  "resultHTML" => $resultHTML,
+                  "keys" => json_encode($FIELDS)
+                );
               }
             }
             elseif ($keyChar == ':') { // двоеточие
               $FIELDS[$fieldIndex] = FIELD_COLON;
               $resultHTML .= "<span class=\"place\" id=\"$fieldIndex\"></span> ";
               $fieldIndex++;
+              $keyTextIndex++;
             }
             else { // что-то непонятное
-              die("Unknown test char: '" . mb_substr($keyText, $keyTextIndex, 10) . "'; testIndex=$testIndex; keyIndex=$keyTextIndex");
+              return array(
+                "status" => "Не удалось распознать ключ",
+                "testIndex" => $testIndex,
+                "keyIndex" => $keyTextIndex,
+                "resultHTML" => $resultHTML,
+                "keys" => json_encode($FIELDS)
+              );
             }
             break;
 
@@ -109,7 +132,10 @@ function prepareTest(string $test, string $keyText) : array
             // Сравниваем следующий символ, если совпал, значит надо вставить букву
             if (mb_substr($test, $testIndex+1, 1) == mb_substr($keyText, $keyTextIndex+1, 1) ||
             // ... проверка ещё одной ситуации, вида '(н_)' - тут тоже вставка буквы
-              mb_substr($test, $testIndex+1, 1) == ')') {
+              mb_substr($test, $testIndex+1, 1) == ')' ||
+            // и, наконец, ещё одна ситуация, вида 'н_(в) тему'
+              mb_substr($test, $testIndex+1, 1) == '(')
+            {
               $FIELDS[$fieldIndex] = FIELD_LETTER;
               $FIELDS[$fieldIndex]['key'] = $keyChar;
               $resultHTML .= "<span class=\"place\" id=\"$fieldIndex\">_</span>";
@@ -125,8 +151,8 @@ function prepareTest(string $test, string $keyText) : array
             break;
           // слитно-раздельно-дефис
           case '(':
-            // Проверяем, если до скобки был пробел, значит это префикс
-            if (mb_substr($test, $testIndex-1, 1) == ' ') {
+            // Проверяем, если до скобки был пробел, закрывающая скобка или это первый символ теста, значит это префикс
+            if ($testIndex == 0 || mb_substr($test, $testIndex-1, 1) == ' ' || mb_substr($test, $testIndex-1, 1) == ')') {
               $resultHTML .= "<span class=\"coplace\" id=\"c$fieldIndex\">(</span>";
               $preIndex = $fieldIndex;
               $isPrefix = true;
@@ -181,13 +207,20 @@ function prepareTest(string $test, string $keyText) : array
           default:
             // Проверяем, если в ключе на этом месте стоит '-', значит тут должно быть тире, просто пропускаем в ключе два символа (тире и пробел за ним)
             // и "отодвигаем" тест назад, для повторной проверки символа с ключом
-            if($keyChar == '-') {
+            if($keyChar == '-' || $keyChar == '—') {
               $keyTextIndex++;
               $testIndex--;
+              $FIELDS[$fieldIndex - 1] = FIELD_DASH;
             }
             // иначе, скорей всего произошла рассинхронизация
             else {
-              die("Synchronization error: testIndex = $testIndex; keyIndex = $keyTextIndex;");
+              return array(
+                "status" => "Произошла рассинхронизация между тестом и ключом",
+                "testIndex" => $testIndex,
+                "keyIndex" => $keyTextIndex,
+                "resultHTML" => $resultHTML,
+                "keys" => json_encode($FIELDS)
+              );
             }
         }
       }
@@ -204,5 +237,9 @@ function prepareTest(string $test, string $keyText) : array
     $testIndex++;
     $keyTextIndex++;
   }
-  return array("resultHTML" => $resultHTML, "Fields" => $FIELDS);
+  return array(
+    "status" => "Success",
+    "resultHTML" => $resultHTML,
+    "keys" => json_encode($FIELDS)
+  );
 }

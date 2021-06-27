@@ -1,0 +1,179 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.message_box {
+    display: block;
+    width: fit-content;
+    max-width: 600px;
+    border: darkblue 1px solid;
+    margin: 100px auto;
+    padding: 0 40px 20px;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 1.5em;
+    background: aliceblue;
+    box-shadow: 3px 3px grey;
+}
+
+.message_box button,
+.message_box input[type="submit"] {
+    font-size: 1em;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+}
+
+.correct {
+    color: forestgreen;
+}
+
+#getPassword {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    box-sizing: border-box;
+    height: 4em;
+    width: 600px;
+    padding-top: 20px;
+}
+
+input[type="password"],
+input[type="text"] {
+    padding: 2px;
+    font-size: 1em;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+    font-family: Calibri, Arial, sans-serif;
+    margin: 1.5em 0;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    margin: 10px auto;
+    width: 90%;
+    font-size: 2em;
+    font-family: Calibri, Arial, sans-serif;
+}
+
+.list .list_line {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.list_line .test_title {
+    min-width: 700px;
+}
+
+.list_line .test_icon {
+    width: 1em;
+    height: 1em;
+    margin: 0 20px 0 0;
+}
+
+.list_line .test_icon.clickable {
+    cursor: pointer;
+}
+
+.list_line .test_buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.add_button {
+    margin: 25px 0;
+    padding: 15px 20px;
+    border: gray 1px solid;
+    border-radius: 4px;
+    width: max-content;
+}
+
+.add_button:hover {
+    cursor: pointer;
+    background-color: lightgreen;
+}
+
+.list_line .test_edit,
+.list_line .test_remove {
+    border: gray 1px solid;
+    border-radius: 4px;
+    padding: 0 20px;
+    margin: 0 5px;
+}
+
+.list_line .test_edit:hover {
+    cursor: pointer;
+    background-color: lightyellow;
+}
+
+.list_line .test_remove:hover {
+    cursor: pointer;
+    background-color: darkred;
+    color: lightyellow;
+}
+
+.wrapper_hr {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 15px;
+}
+
+.input_form {
+    width: 80%;
+    min-width: 600px;
+    margin: 0 auto;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 1.5em;
+}
+
+.input_form form {
+    display: flex;
+    flex-direction: column;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.input_form label {
+    margin: 0 auto 20px;
+    width: 100%;
+}
+
+.input_form input[type="text"] {
+    padding: 5px;
+    width: 600px;
+    font-size: 1em;
+}
+
+.big_text {
+    font-size: inherit;
+    height: 10em;
+    width: 100%;
+}
+
+.small_text {
+    font-size: inherit;
+    height: 2em;
+    width: 100%;
+}
+
+.input_form button {
+    margin-top: 30px;
+    width: 500px;
+    height: 70px;
+    font-size: 1.5em;
+}
+
+#debug {
+    width: 300px;
+    margin-right: 15px;
+}
