@@ -17,11 +17,11 @@ print $result["resultHTML"];
 */
 
 const FIELD_START = array("type" => 'none', "key" => null, "state" => null);
-const FIELD_COMMA_0 = array("type" => 'comma', "key" => 0, "state" => 0); // нет знака препинания
-const FIELD_COMMA_1 = array("type" => 'comma', "key" => 1, "state" => 0); // запятая
-const FIELD_COMMA_2 = array("type" => 'comma', "key" => 2, "state" => 0); // опциональная запятая
-const FIELD_COLON = array("type" => 'comma', "key" => 3, "state" => 0); // двоеточие
-const FIELD_DASH = array("type" => 'comma', "key" => 4, "state" => 0); // тире
+const FIELD_COMMA_0 = array("type" => 'comma', "key" => 0, "state" => null); // нет знака препинания
+const FIELD_COMMA_1 = array("type" => 'comma', "key" => 1, "state" => null); // запятая
+const FIELD_COMMA_2 = array("type" => 'comma', "key" => 2, "state" => null); // опциональная запятая
+const FIELD_COLON = array("type" => 'comma', "key" => 3, "state" => null); // двоеточие
+const FIELD_DASH = array("type" => 'comma', "key" => 4, "state" => null); // тире
 const FIELD_LETTER = array("type" => 'letter', "key" => '', "state" => null);
 const FIELD_SPACE =  array("type" => 'space', "key" => '', "state" => null);
 
