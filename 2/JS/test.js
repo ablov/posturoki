@@ -1,19 +1,5 @@
 let FIELDS, MAX_POSITION;
 
-const BUTTONS = {
-    none: [],
-    comma: ['', ','],
-    letter_ao: ['а', 'о'],
-    letter_ei: ['е', 'и'],
-    letter_ey: ['е', 'я'],
-    letter_eo: ['ё', 'о'],
-    letter_n: ['', 'н'],
-    letter_s: ['', 'с'],
-    letter_: [' ', 'ь', 'ъ'],
-    letter: [],
-    space: ['', '_', '-'],
-}
-
 class Cursor {
     constructor(pos = 0) {
         this.cursorPosition = pos;
@@ -44,102 +30,54 @@ let cursor;
 let checkMode = false;
 
 // Here we process keys from keyboard
-// ToDo: use the buttons also
 const keyHandler = (ev) => {
     if (checkMode) {
         hideChecks();
         checkMode = false;
     }
-    let p, currentField;
+    const p = cursor.getPosition();
+    const currentField = FIELDS[p];
+    const node = $("#" + p);
     switch (ev.key) {
         case ",":
-            p = cursor.getPosition();
-            currentField = FIELDS[p];
             if (currentField.type !== "comma") break;
-            if (currentField.state === 0) {
-                $("#" + p).text(',');
-                currentField.state = 1;
-            }
+            node.text(',');
+            currentField.state = 1;
             cursor.toRight();
             break;
         case ":":
-            p = cursor.getPosition();
-            currentField = FIELDS[p];
             if (currentField.type !== "comma") break;
-            if (currentField.state === 0) {
-                $("#" + p).text(':');
-                currentField.state = 3;
-            }
+            node.text(':');
+            currentField.state = 3;
             cursor.toRight();
             break;
         case " ":
-            p = cursor.getPosition();
-            currentField = FIELDS[p];
             if (currentField.type === "space" && currentField.state !== ' ') {
-                $("#" + p).text(' ');
+                node.text(' ');
                 $("#c" + p).remove();
                 currentField.state = ' ';
             }
             cursor.toRight();
             break;
         case "-":
-            p = cursor.getPosition();
-            currentField = FIELDS[p];
             if (currentField.type === "space" && currentField.state !== '-') {
-                $("#" + p).text('-');
+                node.text('-');
                 $("#c" + p).remove();
                 currentField.state = '-';
             }
-            else if(currentField.type === "comma" && currentField.state === 0) {
-                $("#" + p).text(' —');
+            else if(currentField.type === "comma") {
+                node.text(' —');
                 currentField.state = 4;
             }
             cursor.toRight();
             break;
-        case "н":
-            p = cursor.getPosition();
-            currentField = FIELDS[p];
-            if (currentField.type === "letter_n" && currentField.state !== 'н') {
-                $("#" + p).text('н');
-                currentField.state = 'н';
-            }
-            cursor.toRight();
-            break;
-        case "с":
-            p = cursor.getPosition();
-            currentField = FIELDS[p];
-            if (currentField.type === "letter_s" && currentField.state !== 'с') {
-                $("#" + p).text('с');
-                currentField.state = 'с';
-            }
-            cursor.toRight();
-            break;
-        case "ь":
-        case "ъ":
-            p = cursor.getPosition();
-            currentField = FIELDS[p];
-            let key = ev.key;
-            if (key === 'ь' || key === 'ъ') {
-                if (currentField.type === "letter_" && currentField.state !== key) {
-                    $("#" + p).text(key);
-                    currentField.state = key;
-                }
-            }
-            cursor.toRight();
-            break;
-        case "Enter": // Check
-            checkGrammar();
-            break;
         default:
-            p = cursor.getPosition();
-            currentField = FIELDS[p];
-            if ((currentField.state === '' || currentField.state === null) && ev.key.length === 1) {
-                $("#" + p).text(ev.key);
+            if (currentField.type === "letter" && ev.key.length === 1) {
+                node.text(ev.key);
                 currentField.state = ev.key;
                 cursor.toRight();
             }
     }
-    setButtons(cursor.getPosition());
     return false;
 }
 
@@ -148,17 +86,19 @@ const keyDownHandler = (ev) => {
         hideChecks();
         checkMode = false;
     }
+    let p = cursor.getPosition();
+    let currentField = FIELDS[p];
     switch (ev.key) {
         case "ArrowLeft":
+            if (currentField.type === "comma" && currentField.state === null) currentField.state = 0;
             cursor.toLeft();
             return false;
         case "ArrowRight":
+            if (currentField.type === "comma" && currentField.state === null) currentField.state = 0;
             cursor.toRight();
             return false;
         case "Delete":
         case "Backspace":
-            let p = cursor.getPosition();
-            let currentField = FIELDS[p];
             if (currentField.type === "comma") {
                 $("#" + p).text('');
                 currentField.state = 0;
@@ -166,7 +106,7 @@ const keyDownHandler = (ev) => {
                 $("#" + p).text('');
                 $("#c" + p).remove();
                 currentField.state = '';
-            } else if ((currentField.type === "letter_n" || currentField.type === "letter") && currentField.state !== '') {
+            } else if (currentField.type === "letter" && currentField.state !== '') {
                 $("#" + p).text('');
                 currentField.state = '';
             } else {
@@ -174,8 +114,30 @@ const keyDownHandler = (ev) => {
                 currentField.state = null;
             }
             return false;
+        case "Enter":
+            checkHandler();
+            return false;
     }
     return true;
+}
+
+const checkHandler = () => {
+    const errors = checkGrammar();
+    const result = $("#result");
+    if (errors["spell"]+errors["punctuation"] === 0) {
+        result.html("<p class='greetings'>Поздравляем, ошибок нет!</p>" +
+        "<p>Нажмите любую клавишу для продолжения</p>")
+            .removeClass("hidden");
+    }
+    else {
+        let sClass = "", pClass = "";
+        if (errors["spell"] !== 0) sClass = " class='mistake'";
+        if (errors["punctuation"] !== 0) pClass = " class='mistake'";
+        result.html("<p" + sClass + ">Орфографических ошибок: " + errors["spell"] + "</p>" +
+        "<p" + pClass + ">Пунктуационных ошибок: " + errors["punctuation"] + "</p>" +
+        "<p>Нажмите любую клавишу для продолжения.</p>")
+            .removeClass("hidden");
+    }
 }
 
 $(()=> {
@@ -183,83 +145,65 @@ $(()=> {
     MAX_POSITION = FIELDS.length - 1; // maximum valid position
 
     cursor = new Cursor(1);
-    setButtons(1);
 
     // key event handler
     $(document).on("keypress", keyHandler);
     $(document).on("keydown", keyDownHandler);
+    $("#check").on("click", checkHandler);
 });
 
 // Check the grammar and punctuation
 function checkGrammar() {
     checkMode = true;
     removeCursorFromPosition(cursor.getPosition());
-    let mistakes = 0;
+    let mistakes = {'spell': 0, 'punctuation': 0};
     for (let i = 0; i < FIELDS.length; i++) {
         let field = FIELDS[i];
         if (field.state == null) continue;
         let fieldNode = $("#" + i);
         if (field.state === field.key) {
-            switch (field.type) {
-                case "letter_ao":
-                case "letter_ei":
-                case "letter_eo":
-                case "letter_ey":
-                case "letter":
-                case "comma":
+            if (field.type === "comma" || (field.type === "letter" && field.key !== '')) {
+                fieldNode.css({
+                    'color': 'green',
+                    'fontWeight': 'bold',
+                });
+            }
+            else {
+                let text;
+                if (field.state === '') text =  '|';
+                else if (field.state === ' ') text = '_';
+                else text = field.state;
+                fieldNode.css({
+                    'color': 'green',
+                    'fontWeight': 'bold',
+                }).text(text);
+            }
+        } else {
+            if (field.type === "comma") {
+                if (field.key === 2 && (field.state === 0 || field.state === 1)) {
                     fieldNode.css({
                         'color': 'green',
                         'fontWeight': 'bold',
                     });
-                    break;
-                case "space":
-                case "letter_n":
-                case "letter_s":
-                case "letter_":
-                    let text;
-                    if (field.state === '') text =  '|';
-                    else if (field.state === ' ') text = '_';
-                    else text = field.state;
-                    fieldNode.css({
-                        'color': 'green',
-                        'fontWeight': 'bold',
-                    }).text(text);
-                    break;
-            }
-        } else {
-            switch (field.type) {
-                case "letter_ao":
-                case "letter_ei":
-                case "letter_eo":
-                case "letter_ey":
-                case "letter":
+                } else
+                {
+                    const symbol = ['_', ',', ' ', ':', ' -'];
                     fieldNode.css({
                         'color': 'red',
                         'fontWeight': 'bold',
-                    }).text(field.key);
-                    ++mistakes;
-                    break;
-                case "comma":
-                    fieldNode.css({
-                        'color': 'red',
-                        'fontWeight': 'bold',
-                    }).text((field.key === 0) ? '_' : ',');
-                    ++mistakes;
-                    break;
-                case "space":
-                case "letter_n":
-                case "letter_s":
-                case "letter_":
-                    let text;
-                    if (field.key === '') text = '|';
-                    else if (field.key === ' ') text = '_';
-                    else text = field.key;
-                    fieldNode.css({
-                        'color': 'red',
-                        'fontWeight': 'bold',
-                    }).text(text);
-                    ++mistakes;
-                    break;
+                    }).text(symbol[field.key]);
+                    mistakes["punctuation"]++;
+                }
+            } else {
+                let text;
+                if (field.key === '') text = '|';
+                else if (field.key === ' ') text = '_';
+                else text = field.key;
+                fieldNode.css({
+                    'color': 'red',
+                    'fontWeight': 'bold',
+                }).text(text);
+                mistakes["spell"]++;
             }
         }
     }
@@ -285,19 +229,8 @@ function hideChecks() {
             'fontWeight': '',
         }).text(text);
     }
+    $("#result").html("").addClass("hidden");
     setCursorToPosition(cursor.getPosition());
-}
-
-// shows the buttons corresponding to type of the current position n
-function setButtons(n) {
-    let buttons = BUTTONS[FIELDS[n].type];
-    let buttonNode;
-    let buttonsNode = $("#buttons");
-    buttonsNode.html("");
-    for (let i = 0; i < buttons.length; i++) {
-        buttonNode = $("<button id='" + buttons[i] + "'>" + buttons[i] + "</button>");
-        buttonsNode.append(buttonNode);
-    }
 }
 
 // Clean html at current caret position before move
@@ -340,15 +273,11 @@ function preparePlace() {
     let fieldType = FIELDS[p].type;
     let currentNode = $("#" + p);
     switch (fieldType) {
-        case "letter_ao":
-        case "letter_ei":
-        case "letter_eo":
-        case "letter_ey":
         case "letter":
             let currentValue = currentNode.text();
             if (currentValue === "_") currentValue = "";
             currentNode.text('');
-            let editPlace = $("<input type='test' maxlength='2' minlength='2' placeholder='_' value='" + currentValue + "'>");
+            let editPlace = $("<input type='test' style='font-size: 1em; font-family: monospace; width: 0.6em; border: none;' maxlength='2' minlength='2' placeholder='_' value='" + currentValue + "'>");
             currentNode.append(editPlace);
             editPlace.trigger("focus");
             break;
